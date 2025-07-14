@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Animated Character</title>
+  <style>
+    body {
+      background: #f0f0f0;
+      text-align: center;
+      padding-top: 50px;
+    }
+
+    .character {
+      position: relative;
+      display: inline-block;
+      width: 300px;
+    }
+
+    .head {
+      width: 100%;
+    }
+
+    .mouth {
+      position: absolute;
+      top: 120px;
+      left: 125px;
+      width: 50px;
+      animation: talk 0.5s infinite alternate;
+    }
+
+    .hand {
+      position: absolute;
+      top: 80px;
+      left: -30px;
+      width: 80px;
+      transform-origin: top right;
+      animation: wave 1s infinite;
+    }
+
+    @keyframes wave {
+      0% { transform: rotate(0deg); }
+      50% { transform: rotate(20deg); }
+      100% { transform: rotate(0deg); }
+    }
+
+    @keyframes talk {
+      0% { transform: scaleY(1); }
+      100% { transform: scaleY(0.4); }
+    }
+  </style>
+</head>
+<body>
+  <h2>📢 Animated Seller Character</h2>
+  <div class="character">
+    <img src="hand.png" class="hand" />
+    <img src="head.png" class="head" />
+    <img src="mouth.png" class="mouth" />
+  </div>
+</body>
+</html>
