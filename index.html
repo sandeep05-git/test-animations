@@ -1,60 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Animated Character</title>
+  <meta charset="UTF-8">
+  <title>Single Image Animation</title>
   <style>
     body {
-      background: #f0f0f0;
+      background-color: #f0f0f0;
       text-align: center;
       padding-top: 50px;
     }
 
     .character {
-      position: relative;
-      display: inline-block;
       width: 300px;
+      animation: shake 1s infinite, talk 0.6s infinite alternate;
     }
 
-    .head {
-      width: 100%;
-    }
-
-    .mouth {
-      position: absolute;
-      top: 120px;
-      left: 125px;
-      width: 50px;
-      animation: talk 0.5s infinite alternate;
-    }
-
-    .hand {
-      position: absolute;
-      top: 80px;
-      left: -30px;
-      width: 80px;
-      transform-origin: top right;
-      animation: wave 1s infinite;
-    }
-
-    @keyframes wave {
-      0% { transform: rotate(0deg); }
-      50% { transform: rotate(20deg); }
-      100% { transform: rotate(0deg); }
+    @keyframes shake {
+      0% { transform: translate(0px, 0px); }
+      25% { transform: translate(2px, -2px); }
+      50% { transform: translate(-2px, 2px); }
+      75% { transform: translate(2px, 2px); }
+      100% { transform: translate(0px, 0px); }
     }
 
     @keyframes talk {
       0% { transform: scaleY(1); }
-      100% { transform: scaleY(0.4); }
+      100% { transform: scaleY(0.97); }
     }
   </style>
 </head>
 <body>
-  <h2>📢 Animated Seller Character</h2>
-  <div class="character">
-    <img src="hand.png" class="hand" />
-    <img src="head.png" class="head" />
-    <img src="mouth.png" class="mouth" />
-  </div>
+  <h2>🗣️ Animated Seller Character</h2>
+  <img src="https://raw.githubusercontent.com/sandeep05-git/test-animations/main/WhatsApp%20Image%202025-06-06%20at%2011.48.40%20PM(1).jpeg" class="character">
 </body>
 </html>
