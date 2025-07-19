@@ -1,1 +1,120 @@
+import pygame
+import time
+import threading
+import wave
+import sys
+import os
+import numpy as np
+import contextlib
 
+# Audio path (converted to WAV)
+audio_path = "WhatsApp Ptt 2025-07-19 at 8.45.02 PM(1).wav"
+
+# Constants
+WIDTH, HEIGHT = 800, 600
+FPS = 30
+
+# Character colors
+COLORS = {
+    "Alice": (255, 100, 100),
+    "Bob": (100, 100, 255),
+    "Cathy": (100, 255, 100),
+    "Dave": (255, 255, 100)
+}
+
+POSITIONS = {
+    "Alice": (200, 300),
+    "Bob": (600, 300),
+    "Cathy": (200, 400),
+    "Dave": (600, 400)
+}
+
+def play_audio():
+    try:
+        pygame.mixer.init()
+        pygame.mixer.music.load(audio_path)
+        pygame.mixer.music.play()
+    except Exception as e:
+        print("Audio playback error:", e)
+
+def get_audio_duration():
+    with contextlib.closing(wave.open(audio_path,'r')) as f:
+        frames = f.getnframes()
+        rate = f.getframerate()
+        duration = frames / float(rate)
+        return duration
+
+def draw_character(screen, name, pos, emotion):
+    color = COLORS[name]
+    radius = 40
+    x, y = pos
+    pygame.draw.circle(screen, color, (x, y), radius)
+    font = pygame.font.SysFont(None, 24)
+    label = font.render(name, True, (0, 0, 0))
+    screen.blit(label, (x - 20, y - 10))
+
+    # Visual reaction based on emotion
+    if emotion == "talking":
+        pygame.draw.circle(screen, (255, 255, 255), (x, y), radius, 4)
+    elif emotion == "angry":
+        pygame.draw.line(screen, (255, 0, 0), (x-30, y-30), (x+30, y+30), 4)
+        pygame.draw.line(screen, (255, 0, 0), (x-30, y+30), (x+30, y-30), 4)
+    elif emotion == "surprised":
+        pygame.draw.circle(screen, (0, 0, 0), (x, y + 20), 10)
+    elif emotion == "neutral":
+        pass  # No special decoration for neutral
+
+def main():
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT))
+    pygame.display.set_caption("Office Politics Animation")
+    clock = pygame.time.Clock()
+
+    # Start audio in separate thread
+    threading.Thread(target=play_audio).start()
+
+    start_time = time.time()
+    running = True
+
+    while running:
+        screen.fill((240, 240, 240))
+        current_time = time.time() - start_time
+
+        # Events
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                running = False
+
+        # Character behaviors by time
+        reactions = {
+            "Alice": "neutral",
+            "Bob": "neutral",
+            "Cathy": "neutral",
+            "Dave": "neutral"
+        }
+
+        if 10 <= current_time < 25:
+            reactions["Cathy"] = "talking"
+            reactions["Alice"] = "talking"
+        elif 25 <= current_time < 40:
+            reactions["Bob"] = "surprised"
+        elif 40 <= current_time < 55:
+            reactions["Dave"] = "surprised"
+        elif current_time >= 55:
+            reactions["Bob"] = "angry"
+            reactions["Cathy"] = "surprised"
+            reactions["Alice"] = "surprised"
+
+        for name, pos in POSITIONS.items():
+            draw_character(screen, name, pos, reactions[name])
+
+        pygame.display.flip()
+        clock.tick(FPS)
+
+        if current_time > get_audio_duration() + 1:
+            running = False
+
+    pygame.quit()
+
+if __name__ == "__main__":
+    main()
